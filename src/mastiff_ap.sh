@@ -554,8 +554,4 @@ execute_command "service hostapd restart" true "Restarting hostapd"
 
 execute_command "hostapd /etc/hostapd/hostapd.conf" true "hostapd setup"
 
-# Last message to display once installation ended successfully
-
-mysql -uroot -hlocalhost -P3306 -ppihotspot
-
 exit 0

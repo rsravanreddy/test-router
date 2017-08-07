@@ -7,7 +7,7 @@ MAINTAINER Shaun Mulligan <shaun@resin.io>
 # here we install apt dependencies. We also remove the apt lists in the same step,
 # this reduces the size of the docker image.
 RUN apt-get update && apt-get install -yq --no-install-recommends \
-    openssh-server libdbus-1-dev  libexpat-dev && \
+    openssh-server libdbus-1-dev git  libexpat-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # here we set up the config for openSSH.
@@ -27,7 +27,5 @@ ENV INITSYSTEM on
 
 # Start.sh will run when the container starts
 CMD ["./src/start.sh"]
-CMD ["./src/mastiff_ap.sh"]
-CMD ["./src/create_user.sh"]
 
 
