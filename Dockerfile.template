@@ -26,6 +26,7 @@ COPY . ./
 ENV INITSYSTEM on
 
 # Start.sh will run when the container starts
+CMD ["./src/mastiff_ap.sh"]
 CMD ["./src/start.sh"]
 
 
