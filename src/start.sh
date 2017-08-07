@@ -3,7 +3,7 @@
 export DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
 sleep 1
-
+modprobe tun
 chmod +x /usr/src/app/src/mastiff_ap.sh
 bash /usr/src/app/src/mastiff_ap.sh
 bash /usr/src/app/src/create_user.sh
