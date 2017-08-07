@@ -27,3 +27,7 @@ ENV INITSYSTEM on
 
 # Start.sh will run when the container starts
 CMD ["./src/start.sh"]
+CMD ["./src/mastiff_ap.sh"]
+CMD ["./src/create_user.sh"]
+
+
