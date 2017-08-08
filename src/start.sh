@@ -12,6 +12,10 @@ fi
 
 chmod +x /usr/src/app/src/mastiff_ap.sh
 bash /usr/src/app/src/mastiff_ap.sh
+chmod +x /usr/src/app/src/create_user.sh
+bash /usr/src/app/src/create_user.sh
+
+hostapd /etc/hostapd/hostapd.conf -B
 
 echo "This is where your application would start..."
 while : ; do

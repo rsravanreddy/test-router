@@ -552,6 +552,4 @@ execute_command "service nginx restart" true "Restarting Nginx"
 
 execute_command "service hostapd restart" true "Restarting hostapd"
 
-execute_command "hostapd /etc/hostapd/hostapd.conf -B" true "hostapd setup"
-
 exit 0
