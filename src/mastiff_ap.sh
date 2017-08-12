@@ -250,8 +250,8 @@ if [ $COMMAND_RESULT -ne 0 ]; then
     find /lib/modules/ -iname "tun.ko.gz" -exec /sbin/insmod {} \;
     check_returned_code $?
 
-    display_message "Modprobe module (no check - useless if already loaded)"
-    /sbin/modprobe tun
+    #display_message "Modprobe module (no check - useless if already loaded)"
+    #/sbin/modprobe tun
 
     execute_command "/sbin/lsmod | grep tun" false "Checking for tun module"
     if [ $COMMAND_RESULT -ne 0 ]; then
