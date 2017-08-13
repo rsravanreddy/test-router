@@ -1,1 +1,1 @@
-echo "insert into radcheck (username, attribute, op, value) values ('mastiff', 'Cleartext-Password', ':=', 'mastiff');" | mysql -u root -pmastiff radius
+echo "insert into radcheck (username, attribute, op, value) values ('mastiff', 'Cleartext-Password', ':=', 'mastiff');" | mysql -u root radius
