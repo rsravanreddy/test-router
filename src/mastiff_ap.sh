@@ -240,9 +240,9 @@ install_dependent_packages() {
 
 #install_dependent_packages PIHOTSPOT_DEPS_START[@]
 
-execute_command "dpkg --purge --force-all coova-chilli" true "Remove old configuration of Coova Chilli"
-execute_command "dpkg --purge --force-all haserl" true "Remove old configuration of haserl"
-execute_command "dpkg --purge --force-all hostapd" true "Remove old configuration of hostapd"
+#execute_command "dpkg --purge --force-all coova-chilli" true "Remove old configuration of Coova Chilli"
+#execute_command "dpkg --purge --force-all haserl" true "Remove old configuration of haserl"
+#execute_command "dpkg --purge --force-all hostapd" true "Remove old configuration of hostapd"
 
 execute_command "/sbin/lsmod | grep tun" false "Checking for tun module"
 if [ $COMMAND_RESULT -ne 0 ]; then
@@ -350,7 +350,7 @@ execute_command "cd /usr/src && rm -rf coova-chilli*" true "Removing any previou
 #execute_command "cd /usr/src && git clone $COOVACHILLI_ARCHIVE coova-chilli" true "Cloning CoovaChilli project"
 
 #execute_command "cd /usr/src/coova-chilli && dpkg-buildpackage -us -uc" true "Building CoovaChilli package"
-execute_command "cd /usr/src && dpkg --force-depends -i coova-chilli_*_armhf.deb" true "Installing CoovaChilli package"
+#execute_command "cd /usr/src && dpkg --force-depends -i coova-chilli_*_armhf.deb" true "Installing CoovaChilli package"
 
 display_message "Configuring CoovaChilli up action"
 echo 'ipt -I POSTROUTING -t nat -o $HS_WANIF -j MASQUERADE' >> /etc/chilli/up.sh

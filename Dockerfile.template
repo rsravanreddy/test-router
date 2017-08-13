@@ -74,7 +74,7 @@ WORKDIR /usr/src/coova-chilli
 RUN dpkg-buildpackage -us -uc
 WORKDIR /usr/src
 RUN echo "installing chilli"
-#RUN dpkg --force-depends -i coova-chilli_*_armhf.deb
+RUN dpkg --force-depends -i coova-chilli_*_armhf.deb
 
 WORKDIR /usr/share/nginx/html
 RUN git clone https://github.com/lirantal/daloradius.git daloradius
