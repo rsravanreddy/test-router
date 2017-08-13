@@ -10,8 +10,8 @@ if [ "$INITSYSTEM" != "on" ]; then
   /usr/sbin/sshd -p 22 &
 fi
 
-#chmod +x /usr/src/app/src/mastiff_ap.sh
-#bash /usr/src/app/src/mastiff_ap.sh
+chmod +x /usr/src/app/src/mastiff_ap.sh
+bash /usr/src/app/src/mastiff_ap.sh
 chmod +x /usr/src/app/src/create_user.sh
 bash /usr/src/app/src/create_user.sh
 
