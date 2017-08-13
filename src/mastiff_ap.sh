@@ -343,7 +343,9 @@ execute_command "service freeradius stop" true "Stoping freeradius service to up
 display_message "Activating IP forwarding"
 sed -i '/^#net\.ipv4\.ip_forward=1$/s/^#//g' /etc/sysctl.conf
 check_returned_code $?
-execute_command "/etc/init.d/networking restart" true "Restarting network service to take IP forwarding into account"
+execute_command "/etc/init.d/networking stop" true "Restarting network service to take IP forwarding into account"
+
+execute_command "/etc/init.d/networking start" true "Restarting network service to take IP forwarding into account"
 
 #execute_command "cd /usr/src && rm -rf coova-chilli*" true "Removing any previous sources of CoovaChilli project"
 
