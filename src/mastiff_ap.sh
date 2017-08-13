@@ -308,22 +308,22 @@ execute_command "ifup $WAN_INTERFACE" true "Activating the WAN interface"
 execute_command "ifup $LAN_INTERFACE" true "Activating the LAN interface"
 
 display_message "Creating freeradius database"
-echo 'drop database if exists radius;' | mysql -u root -p$MYSQL_PASSWORD
-echo "GRANT USAGE ON *.* TO 'radius'@'localhost';" | mysql -u root -p$MYSQL_PASSWORD
-echo "DROP USER 'radius'@'localhost';" | mysql -u root -p$MYSQL_PASSWORD
-echo 'create database radius;' | mysql -u root -p$MYSQL_PASSWORD
+echo 'drop database if exists radius;' | mysql -u root 
+echo "GRANT USAGE ON *.* TO 'radius'@'localhost';" | mysql -u root 
+echo "DROP USER 'radius'@'localhost';" | mysql -u root 
+echo 'create database radius;' | mysql -u root 
 check_returned_code $?
 
 display_message "Installing freeradius schema"
-mysql -u root -p$MYSQL_PASSWORD radius < /etc/freeradius/sql/mysql/schema.sql
+mysql -u root  radius < /etc/freeradius/sql/mysql/schema.sql
 check_returned_code $?
 
 display_message "Creating administrator privileges"
-mysql -u root -p$MYSQL_PASSWORD radius < /etc/freeradius/sql/mysql/admin.sql
+mysql -u root  radius < /etc/freeradius/sql/mysql/admin.sql
 check_returned_code $?
 
 display_message "Creating additional tables"
-mysql -u root -p$MYSQL_PASSWORD radius < /etc/freeradius/sql/mysql/nas.sql
+mysql -u root  radius < /etc/freeradius/sql/mysql/nas.sql
 check_returned_code $?
 
 display_message "Updating freeradius configuration - Activate SQL support"
@@ -464,7 +464,7 @@ execute_command "service hostapd start" true "Starting hostapd service"
 execute_command "cd /usr/share/nginx/html/ && rm -rf daloradius && git clone $DALORADIUS_ARCHIVE daloradius" true "Cloning daloradius project"
 
 display_message "Loading daloradius configuration into MySql"
-mysql -u root -p$MYSQL_PASSWORD radius < /usr/share/nginx/html/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql
+mysql -u root  radius < /usr/share/nginx/html/daloradius/contrib/db/fr2-mysql-daloradius-and-freeradius.sql
 check_returned_code $?
 
 display_message "Creating users privileges for localhost"
@@ -474,7 +474,7 @@ display_message "Creating users privileges for 127.0.0.1"
 echo "GRANT ALL ON radius.* to 'radius'@'127.0.0.1';" >> /tmp/grant.sql
 check_returned_code $?
 display_message "Granting users privileges"
-mysql -u root -p$MYSQL_PASSWORD < /tmp/grant.sql
+mysql -u root  < /tmp/grant.sql
 check_returned_code $?
 
 display_message "Configuring daloradius DB user name"
@@ -487,45 +487,45 @@ check_returned_code $?
 display_message "Building NGINX configuration (default listen port : 80)"
 echo '
 server {
-       	listen 80 default_server;
-       	listen [::]:80 default_server;
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-       	root /usr/share/nginx/html;
+        root /usr/share/nginx/html;
 
-       	index index.html index.htm index.php;
+        index index.html index.htm index.php;
 
-       	server_name _;
+        server_name _;
 
-       	location / {
-       		try_files $uri $uri/ =404;
-       	}
+        location / {
+            try_files $uri $uri/ =404;
+        }
 
-       	location ~ \.php$ {
-       		include snippets/fastcgi-php.conf;
-       		fastcgi_pass unix:/var/run/php5-fpm.sock;
-       	}
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+        }
 }' > /etc/nginx/sites-available/default
 check_returned_code $?
 
 display_message "Building NGINX configuration for the portal (default listen port : $HOTSPOT_PORT)"
 echo "
 server {
-       	listen $HOTSPOT_IP:$HOTSPOT_PORT default_server;
+        listen $HOTSPOT_IP:$HOTSPOT_PORT default_server;
 
-       	root /usr/share/nginx/portal;
+        root /usr/share/nginx/portal;
 
-       	index index.html;
+        index index.html;
 
-       	server_name _;
+        server_name _;
 
-       	location / {
-       		try_files \$uri \$uri/ =404;
-       	}
+        location / {
+            try_files \$uri \$uri/ =404;
+        }
 
-       	location ~ \.php\$ {
-       		include snippets/fastcgi-php.conf;
-       		fastcgi_pass unix:/var/run/php5-fpm.sock;
-       	}
+        location ~ \.php\$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+        }
 }" > /etc/nginx/sites-available/portal
 check_returned_code $?
 
