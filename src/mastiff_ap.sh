@@ -228,17 +228,17 @@ install_dependent_packages() {
   fi
 }
 
-check_root
+#check_root
 
-verifyFreeDiskSpace
+#verifyFreeDiskSpace
 
-prepare_install
+#prepare_install
 
-update_package_cache
+#update_package_cache
 
-notify_package_updates_available
+#notify_package_updates_available
 
-install_dependent_packages PIHOTSPOT_DEPS_START[@]
+#install_dependent_packages PIHOTSPOT_DEPS_START[@]
 
 execute_command "dpkg --purge --force-all coova-chilli" true "Remove old configuration of Coova Chilli"
 execute_command "dpkg --purge --force-all haserl" true "Remove old configuration of haserl"
@@ -250,8 +250,8 @@ if [ $COMMAND_RESULT -ne 0 ]; then
     find /lib/modules/ -iname "tun.ko.gz" -exec /sbin/insmod {} \;
     check_returned_code $?
 
-    #display_message "Modprobe module (no check - useless if already loaded)"
-    #/sbin/modprobe tun
+    display_message "Modprobe module (no check - useless if already loaded)"
+    /sbin/modprobe tun
 
     execute_command "/sbin/lsmod | grep tun" false "Checking for tun module"
     if [ $COMMAND_RESULT -ne 0 ]; then
@@ -347,10 +347,10 @@ execute_command "/etc/init.d/networking restart" true "Restarting network servic
 
 execute_command "cd /usr/src && rm -rf coova-chilli*" true "Removing any previous sources of CoovaChilli project"
 
-execute_command "cd /usr/src && git clone $COOVACHILLI_ARCHIVE coova-chilli" true "Cloning CoovaChilli project"
+#execute_command "cd /usr/src && git clone $COOVACHILLI_ARCHIVE coova-chilli" true "Cloning CoovaChilli project"
 
-execute_command "cd /usr/src/coova-chilli && dpkg-buildpackage -us -uc" true "Building CoovaChilli package"
-execute_command "cd /usr/src && dpkg --force-depends -i coova-chilli_*_armhf.deb" true "Installing CoovaChilli package"
+#execute_command "cd /usr/src/coova-chilli && dpkg-buildpackage -us -uc" true "Building CoovaChilli package"
+#execute_command "cd /usr/src && dpkg --force-depends -i coova-chilli_*_armhf.deb" true "Installing CoovaChilli package"
 
 display_message "Configuring CoovaChilli up action"
 echo 'ipt -I POSTROUTING -t nat -o $HS_WANIF -j MASQUERADE' >> /etc/chilli/up.sh

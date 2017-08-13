@@ -1,32 +1,104 @@
-# This first line selects our base image. In this instance we use the dockerfile templates,
-# this means the appropriate image gets picked for instance on rpi3, this would end up
-# resolving to resin/raspberrypi3-python:latest
+###########################################
+# Initialize build stage
+###########################################
 FROM resin/%%RESIN_MACHINE_NAME%%-debian
-MAINTAINER Shaun Mulligan <shaun@resin.io>
+# FROM resin/%%RESIN_MACHINE_NAME%%-node:6
 
-# here we install apt dependencies. We also remove the apt lists in the same step,
-# this reduces the size of the docker image.
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-    openssh-server libdbus-1-dev git  libexpat-dev && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+ENV INITSYSTEM on DEVICE_TYPE=%%RESIN_MACHINE_NAME%%
 
-# here we set up the config for openSSH.
-RUN mkdir /var/run/sshd \
-    && echo 'root:resin' | chpasswd \
-    && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
-    && sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+###########################################
+# Install packages
+###########################################
+# All packages after rfkill are direct port from go-mastiff and should be reviewed to see if they're still needed
+RUN apt-get -q update && apt-get install -yq --no-install-recommends \
+#  dnsmasq \
+  hostapd \
+  iproute2 \
+  iw \
+  libdbus-1-dev \
+  libexpat-dev \
+  rfkill \
+  apt-transport-https \
+  apt-utils \
+  wget \
+  build-essential \
+  grep \
+  whiptail \
+  debconf-utils \
+  avahi-daemon \
+  libavahi-client-dev \
+  git \
+  libjson-c-dev \
+  gengetopt \
+  devscripts \
+  libtool \
+  bash-completion \
+  autoconf \
+  automake \
+  php5-mysql \
+  php-pear \
+  php5-gd \
+  php-db \
+  php5-fpm \
+  libgd2-xpm-dev \
+  libpcrecpp0 \
+  libxpm4 \
+  nginx \
+  php5-xcache \
+  debhelper \
+  libssl-dev \
+  libcurl4-gnutls-dev \
+  mysql-server \
+  freeradius \
+  freeradius-mysql \
+  gcc \
+  make \
+  libnl1 \
+  libnl-dev \
+  pkg-config \
+  iptables \
+  libjson-c-dev \
+  gengetopt \
+  devscripts \
+  libtool \
+  bash-completion\
+ 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# We set the working directory for the next few commands
-WORKDIR /usr/src/app
+###########################################
+# Install packages built from Git repos
+###########################################
+WORKDIR /usr/src
+RUN git clone https://github.com/coova/coova-chilli.git coova-chilli
+WORKDIR /usr/src/coova-chilli
+# todo Why aren't we signing the package or changes file?
+RUN dpkg-buildpackage -us -uc
+WORKDIR /usr/src
+RUN dpkg --force-depends -i coova-chilli_*_armhf.deb
 
-# here we copy all the root of our repo into the containers WORKDIR
-COPY . ./
+WORKDIR /usr/share/nginx/html
+RUN git clone https://github.com/lirantal/daloradius.git daloradius
+#RUN cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/sql/mysql/counter.conf /etc/freeradius/sql/mysql/counter.conf
+#RUN cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/sites-available/default /etc/freeradius/sites-available/default
+#RUN cp /usr/share/nginx/html/daloradius/contrib/configs/freeradius-2.1.8/cfg1/raddb/modules/sql.conf /etc/freeradius/sql.conf
 
-# Enable systemd init system in the container, so it never closes
-ENV INITSYSTEM on
+WORKDIR /usr/share/nginx
+RUN git clone https://github.com/pihomeserver/Kupiki-Hotspot-Portal.git portal
 
-# Start.sh will run when the container starts
-RUN ["./src/mastiff_ap.sh"]
-CMD ["./src/start.sh"]
+###########################################
+# Copy config files
+###########################################
+#WORKDIR /etc
+#COPY ./config/etc ./
 
+###########################################
+# Copy scripts and configure defaults
+###########################################
+WORKDIR /usr/scripts
+COPY ./scripts ./
+# Set defaults as part of build to minimize services that need restarting during first run config
+RUN bash ./set-defaults.sh
 
+###########################################
+# READY?! GO!!!
+###########################################
+CMD bash start.sh
