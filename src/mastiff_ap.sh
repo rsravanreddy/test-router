@@ -265,9 +265,9 @@ execute_command "/sbin/ifconfig -a | grep $LAN_INTERFACE" false "Checking if wla
 if [ $COMMAND_RESULT -ne 0 ]; then
     display_message "Wifi interface not found. Upgrading the system first"
 
-    execute_command "apt dist-upgrade -y --force-yes" true "Upgrading the distro. Be patient"
+    #execute_command "apt dist-upgrade -y --force-yes" true "Upgrading the distro. Be patient"
 
-    install_dependent_packages PIHOTSPOT_DEPS_WIFI[@]
+    #install_dependent_packages PIHOTSPOT_DEPS_WIFI[@]
 
     display_message "Please reboot and run the script again"
     exit 1
