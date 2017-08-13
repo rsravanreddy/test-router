@@ -283,9 +283,9 @@ execute_command "echo 'mysql-server mysql-server/root_password_again password $M
 display_message "Getting WAN IP of the Raspberry Pi (for daloradius access)"
 MY_IP=`ifconfig $WAN_INTERFACE | grep "inet addr" | awk -F":" '{print $2}' | awk '{print $1}'`
 
-install_dependent_packages PIHOTSPOT_DEPS[@]
+#install_dependent_packages PIHOTSPOT_DEPS[@]
 
-notify_package_updates_available
+#notify_package_updates_available
 
 execute_command "service mysql restart" true "Starting MySql service"
 
