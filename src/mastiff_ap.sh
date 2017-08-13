@@ -343,16 +343,15 @@ execute_command "service freeradius stop" true "Stoping freeradius service to up
 display_message "Activating IP forwarding"
 sed -i '/^#net\.ipv4\.ip_forward=1$/s/^#//g' /etc/sysctl.conf
 check_returned_code $?
-execute_command "/etc/init.d/networking stop" true "Restarting network service to take IP forwarding into account"
 
-execute_command "/etc/init.d/networking start" true "Restarting network service to take IP forwarding into account"
+execute_command "/etc/init.d/networking restart" true "Restarting network service to take IP forwarding into account"
 
 #execute_command "cd /usr/src && rm -rf coova-chilli*" true "Removing any previous sources of CoovaChilli project"
 
 #execute_command "cd /usr/src && git clone $COOVACHILLI_ARCHIVE coova-chilli" true "Cloning CoovaChilli project"
 
 #execute_command "cd /usr/src/coova-chilli && dpkg-buildpackage -us -uc" true "Building CoovaChilli package"
-#execute_command "cd /usr/src && dpkg --force-depends -i coova-chilli_*_armhf.deb" true "Installing CoovaChilli package"
+execute_command "cd /usr/src && dpkg --force-depends -i coova-chilli_*_armhf.deb" true "Installing CoovaChilli package"
 
 display_message "Configuring CoovaChilli up action"
 echo 'ipt -I POSTROUTING -t nat -o $HS_WANIF -j MASQUERADE' >> /etc/chilli/up.sh
