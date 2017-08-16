@@ -457,7 +457,8 @@ beacon_int=100
 dtim_period=2
 max_num_sta=255
 rts_threshold=2347
-fragm_threshold=2346" > /etc/hostapd/hostapd.conf
+fragm_threshold=2346
+wmm_enabled=0" > /etc/hostapd/hostapd.conf
 check_returned_code $?
 
 execute_command "service hostapd start" true "Starting hostapd service"
